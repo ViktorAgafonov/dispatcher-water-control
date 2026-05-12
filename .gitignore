@@ -1,0 +1,11 @@
+node_modules/
+dist/
+scripts/bin/
+*.log
+
+# Пользовательские данные (генерируются при запуске)
+config.json
+stats.json
+
+# Проприетарная документация
+protokol_pulsar_m.pdf

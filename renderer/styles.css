@@ -1,0 +1,176 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f9; color: #1f2937; }
+body { display: flex; flex-direction: column; overflow: hidden; }
+
+.tabs { display: flex; align-items: center; gap: 4px; padding: 10px 14px; background: #1f2937; color: #e5e7eb; flex: 0 0 auto; }
+.tab { background: transparent; color: #e5e7eb; border: 0; padding: 8px 16px; cursor: pointer; border-radius: 6px; font-size: 14px; }
+.tab:hover { background: #374151; }
+.tab.active { background: #3b82f6; color: #fff; }
+.spacer { flex: 1; }
+
+.btn-primary { background: #3b82f6; color: #fff; border: 0; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.btn-primary:hover { background: #2563eb; }
+.btn-secondary { background: #4b5563; color: #fff; border: 0; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.btn-secondary:hover { background: #374151; }
+
+/* Главный контейнер: занимает всё доступное место под шапкой, не даёт окну прокручиваться. */
+main { padding: 16px; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.tab-panel { display: none; flex: 1 1 auto; min-height: 0; flex-direction: column; }
+.tab-panel.active { display: flex; }
+
+/* Вкладка настроек скроллится внутри самой себя, чтобы нижние кнопки были доступны. */
+#tab-settings { overflow-y: auto; }
+
+/* Вкладка логов */
+#tab-logs { gap: 10px; }
+.logs-toolbar { display: flex; align-items: center; gap: 14px; flex-wrap: nowrap; flex: 0 0 auto; background: #fff; padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
+.logs-toolbar .log-count { white-space: nowrap; font-size: 13px; color: #374151; flex-shrink: 1; overflow: hidden; text-overflow: ellipsis; }
+.logs-toolbar .btn-secondary { flex-shrink: 0; }
+.logs-toolbar .inline { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #374151; flex-direction: row; }
+.logs-toolbar select { padding: 4px 6px; font-size: 13px; border: 1px solid #d1d5db; border-radius: 4px; background: #fff; }
+.log-view { flex: 1 1 auto; min-height: 0; overflow-y: auto; background: #0f172a; color: #e2e8f0; font-family: "Consolas", "Cascadia Mono", "Courier New", monospace; font-size: 12px; line-height: 1.45; border-radius: 8px; padding: 8px 10px; }
+.log-line { display: flex; gap: 8px; white-space: pre-wrap; word-break: break-all; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.log-line .ts     { color: #94a3b8; flex: 0 0 auto; }
+.log-line .lvl    { flex: 0 0 46px; font-weight: 700; }
+.log-line .src    { flex: 0 0 auto; color: #93c5fd; }
+.log-line .msg    { flex: 1 1 auto; color: #e2e8f0; }
+.log-line.debug .lvl { color: #94a3b8; }
+.log-line.info  .lvl { color: #10b981; }
+.log-line.warn  .lvl { color: #f59e0b; }
+.log-line.error .lvl { color: #ef4444; }
+.log-line.error .msg { color: #fecaca; }
+
+/* Вкладка «О программе» */
+#tab-about { overflow-y: auto; }
+.about { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 18px 22px; max-width: 880px; }
+.about h2 { margin: 0 0 4px; font-size: 22px; color: #111827; }
+.about h3 { margin: 18px 0 6px; font-size: 15px; color: #374151; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
+.about .about-sub { margin: 0 0 6px; color: #6b7280; font-size: 13px; }
+.about ul, .about ol { margin: 6px 0; padding-left: 22px; color: #374151; font-size: 14px; line-height: 1.6; }
+.about p { color: #374151; font-size: 14px; line-height: 1.55; margin: 6px 0; }
+.about-states { list-style: none; padding-left: 0; }
+.about-states li { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+.led-sample { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #111827; flex: 0 0 auto; }
+.led-sample.ok    { background: #10b981; }
+.led-sample.stale { background: #f59e0b; }
+.led-sample.err   { background: #ef4444; }
+.led-sample.idle  { background: #9ca3af; }
+
+/* Мнемосхема занимает всё оставшееся место, SVG масштабируется по размеру контейнера. */
+.mnemonic-wrap { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 10px; flex: 1 1 auto; min-height: 0; display: flex; }
+.mnemonic-wrap > svg { width: 100%; height: 100%; display: block; font-family: inherit; }
+
+.mnemonic-wrap svg .pipe { stroke: #2563eb; stroke-width: 5; fill: none; }
+.mnemonic-wrap svg .pipe-arrow { fill: #2563eb; }
+.mnemonic-wrap svg .node-box { stroke: #6b7280; stroke-width: 1.5; fill: none; stroke-dasharray: 6 4; }
+.mnemonic-wrap svg .node-label { fill: #6b7280; font-size: 12px; letter-spacing: 0.5px; }
+.mnemonic-wrap svg .counter-box { fill: #fff; stroke: #111827; stroke-width: 1.5; }
+.mnemonic-wrap svg .counter-title { fill: #111827; font-size: 12px; font-weight: 600; }
+.mnemonic-wrap svg .counter-sub { fill: #6b7280; font-size: 10px; }
+.mnemonic-wrap svg .value-text { fill: #111827; font-size: 20px; font-weight: 700; }
+.mnemonic-wrap svg .unit-text { fill: #6b7280; font-size: 11px; }
+.mnemonic-wrap svg .counter-sep { stroke: #d1d5db; stroke-width: 1; }
+.mnemonic-wrap svg .flow-text { fill: #1d4ed8; font-size: 13px; font-weight: 600; }
+.mnemonic-wrap svg .status-text { fill: #6b7280; font-size: 11px; }
+.mnemonic-wrap svg .err-text { fill: #b91c1c; font-size: 11px; }
+.mnemonic-wrap svg .conv-box { fill: #ecfdf5; stroke: #10b981; stroke-width: 1.2; }
+.mnemonic-wrap svg .conv-label { fill: #065f46; font-size: 11px; font-weight: 600; }
+.mnemonic-wrap svg .ip-text { fill: #6b7280; font-size: 10px; }
+.mnemonic-wrap svg .workshop-box { fill: #f3f4f6; stroke: #374151; stroke-width: 1.5; }
+.mnemonic-wrap svg .workshop-text { fill: #111827; font-size: 13px; font-weight: 600; }
+.mnemonic-wrap svg .workshop-sep { stroke: #d1d5db; stroke-width: 1; }
+.mnemonic-wrap svg .usage-label { fill: #6b7280; font-size: 11px; }
+.mnemonic-wrap svg .usage-value { fill: #1d4ed8; font-size: 12px; font-weight: 700; }
+.mnemonic-wrap svg .usage-period { fill: #9ca3af; font-size: 9px; }
+
+/* Отключённый узел учёта — серый и приглушённый */
+.mnemonic-wrap svg g.node-disabled { opacity: 0.45; }
+.mnemonic-wrap svg .flow-label { fill: #1d4ed8; font-size: 12px; font-style: italic; }
+.mnemonic-wrap svg .eth-line { stroke: #f59e0b; stroke-width: 2; fill: none; }
+.mnemonic-wrap svg .valve { stroke: #111827; stroke-width: 1.5; fill: #fff; }
+
+/* Светодиод статуса */
+.mnemonic-wrap svg .led-circle { stroke: #111827; stroke-width: 1; }
+.mnemonic-wrap svg .led-circle.ok { fill: #10b981; }
+.mnemonic-wrap svg .led-circle.stale { fill: #f59e0b; }
+.mnemonic-wrap svg .led-circle.err { fill: #ef4444; }
+.mnemonic-wrap svg .led-circle.idle { fill: #9ca3af; }
+
+/* Тема «Водоотведение»: грязно-зелёные трубы и подписи. */
+.mnemonic-wrap svg.mnemonic-drainage .pipe { stroke: #6b7c43; }
+.mnemonic-wrap svg.mnemonic-drainage .pipe-arrow,
+.mnemonic-wrap svg.mnemonic-drainage polygon[fill="#2563eb"] { fill: #6b7c43; }
+.mnemonic-wrap svg.mnemonic-drainage .flow-label { fill: #4d5b30; }
+.mnemonic-wrap svg.mnemonic-drainage .flow-text { fill: #4d5b30; }
+.mnemonic-wrap svg.mnemonic-drainage .usage-value { fill: #4d5b30; }
+.mnemonic-wrap svg.mnemonic-drainage .workshop-box { fill: #f5f5e9; stroke: #4d5b30; }
+
+.legend { display: flex; align-items: center; gap: 18px; margin-top: 10px; padding: 0 4px; flex-wrap: wrap; flex: 0 0 auto; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #374151; }
+.legend .led { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #111827; display: inline-block; }
+.legend .led.ok { background: #10b981; }
+.legend .led.stale { background: #f59e0b; }
+.legend .led.err { background: #ef4444; }
+.legend .led.idle { background: #9ca3af; }
+.legend .spacer { flex: 1; }
+
+.footer-note { color: #6b7280; font-size: 12px; }
+
+form .row { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+form label { display: flex; flex-direction: column; font-size: 13px; color: #374151; gap: 4px; }
+form input, form select { padding: 7px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; background: #fff; }
+form input:focus { outline: 2px solid #93c5fd; border-color: #3b82f6; }
+
+table.meters { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
+table.meters th, table.meters td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+table.meters th { background: #f3f4f6; color: #374151; font-weight: 600; font-size: 13px; }
+table.meters input { width: 100%; min-width: 68px;}
+table.meters select { width: 100%; min-width: 68px; padding: 6px 22px 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; background: #fff; }
+table.meters td.cell-center { text-align: center; }
+table.meters td.cell-center input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+table.meters th:first-child, table.meters td:first-child { width: 1%; white-space: nowrap; padding-left: 2px; padding-right: 2px; }
+
+.actions { display: flex; align-items: center; gap: 12px; }
+#save-status { color: #10b981; font-size: 13px; }
+
+/* Вкладка «Отчёты» */
+#tab-reports { overflow-y: auto; gap: 12px; }
+.reports-toolbar { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+#report-summary, #report-detail { padding: 0 2px; }
+
+.report-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.report-card { flex: 1 1 200px; min-width: 180px; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); padding: 14px 16px; }
+.report-card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin-bottom: 10px; }
+.report-card-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; color: #374151; padding: 3px 0; }
+.report-card-row strong { font-size: 16px; font-weight: 700; }
+.report-card-in  .report-card-row strong { color: #2563eb; }
+.report-card-out .report-card-row strong { color: #6b7c43; }
+.report-card-loss .report-card-row strong { color: #d97706; }
+.report-card-in  { border-top: 3px solid #3b82f6; }
+.report-card-out { border-top: 3px solid #6b7c43; }
+.report-card-loss { border-top: 3px solid #f59e0b; }
+
+.report-section { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 14px 16px; margin-bottom: 12px; }
+.report-section-title { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: #1f2937; }
+.report-hist-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.report-hist-toolbar .report-section-title { margin: 0; flex: 1 1 auto; }
+.report-period-btns { display: flex; gap: 6px; }
+.report-period-btn { padding: 5px 12px; font-size: 12px; }
+.report-period-btn.active { background: #3b82f6; }
+
+.report-table-wrap { overflow-x: auto; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.report-table th, .report-table td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #f3f4f6; white-space: nowrap; }
+.report-table th { background: #f9fafb; font-weight: 600; color: #374151; font-size: 12px; position: sticky; top: 0; }
+.report-table tbody tr:hover { background: #f9fafb; }
+.report-table .report-num { text-align: right; font-variant-numeric: tabular-nums; }
+.report-table .report-ts  { color: #6b7280; font-size: 12px; }
+.report-table .report-water { color: #1d4ed8; }
+.report-table .report-drain { color: #4d5b30; }
+.report-table .report-loss  { color: #d97706; }
+.report-table .report-row-water { background: #eff6ff; }
+.report-table .report-row-drain { background: #f5f5e9; }
+.report-table .report-row-total td { border-top: 2px solid #e5e7eb; background: #f3f4f6; }
+.report-table .report-row-loss  td { background: #fffbeb; }
+.report-table-history th { max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
+.report-empty { color: #9ca3af; font-size: 13px; padding: 12px 0; margin: 0; }

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Диспетчер Водоснабжения</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="tabs">
+    <button class="tab active" data-tab="main">Водоснабжение</button>
+    <button class="tab" data-tab="drainage">Водоотведение</button>
+    <button class="tab" data-tab="reports">Отчёты</button>
+    <button class="tab" data-tab="settings">Настройки</button>
+    <button class="tab" data-tab="logs">Логи</button>
+    <button class="tab" data-tab="about">О программе</button>
+    <div class="spacer"></div>
+    <button id="poll-now" class="btn-secondary" title="Опросить сейчас">Опросить</button>
+  </header>
+
+  <main>
+    <!-- Главная -->
+    <section id="tab-main" class="tab-panel active">
+      <div class="mnemonic-wrap">
+        <svg id="mnemonic" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="led ok"></span>Актуально</span>
+        <span class="legend-item"><span class="led stale"></span>Устарело</span>
+        <span class="legend-item"><span class="led err"></span>Ошибка связи</span>
+        <span class="legend-item"><span class="led idle"></span>Нет данных</span>
+        <span class="spacer"></span>
+        <span id="last-poll" class="footer-note"></span>
+      </div>
+    </section>
+
+    <!-- Водоотведение -->
+    <section id="tab-drainage" class="tab-panel">
+      <div class="mnemonic-wrap">
+        <svg id="mnemonic-drainage" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="led ok"></span>Актуально</span>
+        <span class="legend-item"><span class="led stale"></span>Устарело</span>
+        <span class="legend-item"><span class="led err"></span>Ошибка связи</span>
+        <span class="legend-item"><span class="led idle"></span>Нет данных</span>
+        <span class="spacer"></span>
+        <span id="last-poll-drainage" class="footer-note"></span>
+      </div>
+    </section>
+
+    <!-- Отчёты -->
+    <section id="tab-reports" class="tab-panel">
+      <div class="reports-toolbar">
+        <button id="report-export-btn" class="btn-primary">Создать отчёт</button>
+        <span id="report-export-status" class="footer-note"></span>
+      </div>
+      <div id="report-summary"></div>
+      <div id="report-detail"></div>
+    </section>
+
+    <!-- Настройки -->
+    <section id="tab-settings" class="tab-panel">
+      <form id="settings-form">
+        <div class="row">
+          <label>Период опроса (сек, 10–7200)
+            <input type="number" id="pollInterval" min="10" max="7200" step="1" />
+          </label>
+          <label>Таймаут TCP (мс)
+            <input type="number" id="timeoutMs" min="200" step="100" />
+          </label>
+        </div>
+
+        <h3>Счётчики водоснабжения (Пульсар)</h3>
+        <table class="meters">
+          <thead>
+            <tr>
+              <th title="Включить опрос">Опр.</th>
+              <th>Название</th>
+              <th>IP</th>
+              <th>Порт</th>
+              <th title="Сетевой адрес прибора (BCD)">Адрес</th>
+              <th title="Час начала суток (0–23)">Сут. с ч.</th>
+              <th title="День начала недели (1=Пн … 7=Вс)">Нед. с дн.</th>
+            </tr>
+          </thead>
+          <tbody id="meters-body"></tbody>
+        </table>
+
+        <h3>Счётчики водоотведения (Эхо Сигнур)</h3>
+        <table class="meters">
+          <thead>
+            <tr>
+              <th title="Включить опрос">Опр.</th>
+              <th>Название</th>
+              <th>IP</th>
+              <th>Порт</th>
+              <th title="Modbus-адрес прибора (1…247)">Адрес</th>
+              <th title="Час начала суток (0–23)">Сут. с ч.</th>
+              <th title="День начала недели (1=Пн … 7=Вс)">Нед. с дн.</th>
+            </tr>
+          </thead>
+          <tbody id="drainage-meters-body"></tbody>
+        </table>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">Сохранить</button>
+          <span id="save-status"></span>
+        </div>
+      </form>
+    </section>
+
+    <!-- Логи -->
+    <section id="tab-logs" class="tab-panel">
+      <div class="logs-toolbar">
+        <label class="inline" title="Приостановить накопление и приём новых записей лога"><input type="checkbox" id="log-enabled" checked> Логирование</label>
+        <label class="inline"><input type="checkbox" id="log-autoscroll" checked> Прокрутка</label>
+        <label class="inline">Уровень:
+          <select id="log-level-filter">
+            <option value="debug">Всё (debug+)</option>
+            <option value="info" selected>Инфо и выше</option>
+            <option value="warn">Предупреждения и выше</option>
+            <option value="error">Только ошибки</option>
+          </select>
+        </label>
+        <label class="inline">Источник:
+          <select id="log-source-filter"><option value="">Все</option></select>
+        </label>
+        <span class="spacer"></span>
+        <span id="log-count" class="footer-note log-count"></span>
+        <button type="button" id="log-clear" class="btn-secondary">Очистить</button>
+      </div>
+      <div class="log-view" id="log-view"></div>
+    </section>
+
+    <!-- О программе -->
+    <section id="tab-about" class="tab-panel">
+      <div class="about">
+        <h2>Диспетчер Водоснабжения</h2>
+        <p class="about-sub">Программно-аппаратный комплекс для оперативного контроля и диспетчеризации водоснабжения производственных объектов. Обеспечивает сбор и обработку данных со счётчиков Пульсар и Сигнур, отображение текущих объёмов и расходов воды, учёт сточных вод, а также формирование статистики и баланса водопотребления в режиме реального времени.</p>
+
+        <h3>Разработчик</h3>
+        <ul>
+          <li><strong>Автор:</strong> Агафонов В.В.</li>
+          <li><strong>Год разработки:</strong> 2026</li>
+          <li><strong>Версия:</strong> <span id="about-version">—</span></li>
+          <li><strong>Платформа:</strong> Electron + Node.js</li>
+        </ul>
+
+        <h3>Краткая инструкция</h3>
+        Настройка конвертеров для счетчиков Пульсар:
+        <ul>
+          <li>Для счетчиков Пульсар используется конвертер RS-485_to_TCP от производителя счетчика</li>
+          <li>Настройка через WEB-Интерфейс по ip прибора</li>
+          <li>Скорость обмена (Baud rate): 9600 бод</li>
+          <li>Четность (Parity): Нет (None)</li>
+          <li>Биты данных: 8</li>
+          <li>Стоп-биты: 1</li>
+        </ul>
+        Настройка конвертера для счетчиков Сигнур:
+        <ul>
+          <li>Для счетчиков Сигнур используется конвертер MOXA в режиме RS232_to_TCP (TCP-Server)</li>
+          <li>Настройка через WEB-Интерфейс по ip прибора</li>
+          <li>Скорость обмена (Baud rate): 9600 бод</li>
+          <li>Четность (Parity): Нет (None)</li>
+          <li>Биты данных: 8</li>
+          <li>Стоп-биты: 1</li>
+        </ul>
+        Настройка программы:
+        <ol>
+          <li>Перейдите во вкладку <em>Настройки</em>.</li>
+          <li>Укажите для каждого счётчика IP-адрес преобразователя, порт, сетевой адрес прибора и галку «Опр.» (включён ли опрос).</li>
+          <li>Задайте час начала суток («Сут. с ч.») и день начала недели («Нед. с дн.») — относительно них считается суточный и недельный расход.</li>
+          <li>Период опроса — от 10 с до 7200 с (2 часа). Таймаут TCP — обычно 1500–3000 мс.</li>
+          <li>Нажмите <em>Сохранить</em>. Опрос перезапустится автоматически.</li>
+          <li>На вкладках <em>Водоснабжение</em> / <em>Водоотведение</em> отображается мнемосхема с актуальными показаниями.</li>
+          <li>Кнопка <em>Опросить</em> в шапке инициирует внеочередной опрос.</li>
+        </ol>
+
+        <h3>Состояния узла учёта</h3>
+        <ul class="about-states">
+          <li><span class="led-sample ok"></span><strong>«Актуально»</strong> - последний успешный опрос свежее двух периодов опроса.</li>
+          <li><span class="led-sample stale"></span><strong>«Устарело»</strong> - данные есть, но с момента последнего успешного ответа прошло больше двух периодов опроса.</li>
+          <li><span class="led-sample err"></span><strong>«Ошибка связи»</strong> - последний опрос завершился ошибкой.</li>
+          <li><span class="led-sample idle"></span><strong>«Нет данных»</strong> - опрос отключён в настройках или ещё ни разу не выполнялся.</li>
+        </ul>
+        
+        <h3>Отчёты </h3>
+        <p>Отчёты генерируются в формате CSV с разделителем точка с запятой (;) и кодировкой UTF-8.
+          При экспорте файл отчета сохраняется рядом с исполняемым файлом приложения.</p>
+
+        <h3>Учёт расхода</h3>
+        <p>Суточный и недельный расход вычисляется как разность текущего показания и базового, зафиксированного в начале периода. Программа сохраняет почасовую историю показаний (~8 суток), поэтому если приложение запускается, например, раз в сутки — расход за сутки и неделю всё равно будет посчитан корректно по сохранённым показаниям.</p>
+        <p>Под индикаторами расхода отображается время <em>первого замера</em> в текущем периоде.</p>
+
+        <h3>Логи</h3>
+        <p>Кольцевой буфер на 1000 записей. Галка <em>Логирование</em> приостанавливает приём новых записей в renderer (опрос продолжается), <em>Автопрокрутка</em> — следит за концом списка. Доступны фильтры по уровню и источнику.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

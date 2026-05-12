@@ -30,7 +30,7 @@ npm start
 
 ```bash
 npm run build        # dist\Диспетчер Водоснабжения-win32-x64\
-npm run build:zip    # + dist\ДиспетчерВодоснабжения-1.1.0-win-x64.zip
+npm run build:zip    # + dist\DispatcherWater-1.1.0-win-x64.zip
 ```
 
 Или через готовые обёртки:

@@ -9,9 +9,9 @@ const path = require('path');
 
 const pkg = require('../package.json');
 const version = pkg.version;
-const appName = 'Pulsar Monitor';
+const appName = 'Диспетчер Водоснабжения';
 const unpackedDir = path.join(__dirname, '..', 'dist', `${appName}-win32-x64`);
-const zipPath = path.join(__dirname, '..', 'dist', `PulsarMonitor-${version}-win-x64.zip`);
+const zipPath = path.join(__dirname, '..', 'dist', `DispatcherWater-${version}-win-x64.zip`);
 
 if (!fs.existsSync(unpackedDir)) {
   console.error(`[build-zip] Каталог ${unpackedDir} не найден. Сначала выполните "npm run build".`);

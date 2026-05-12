@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const appName = 'Pulsar Monitor';
+const appName = 'Диспетчер Водоснабжения';
 const root = path.join(__dirname, '..', 'dist', `${appName}-win32-x64`);
 
 if (!fs.existsSync(root)) {

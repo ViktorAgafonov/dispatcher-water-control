@@ -128,7 +128,7 @@ table.meters input { width: 100%; min-width: 68px;}
 table.meters select { width: 100%; min-width: 68px; padding: 6px 22px 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; background: #fff; }
 table.meters td.cell-center { text-align: center; }
 table.meters td.cell-center input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-table.meters th:first-child, table.meters td:first-child { width: 1%; white-space: nowrap; padding-left: 2px; padding-right: 2px; }
+table.meters th:first-child, table.meters td:first-child { width: 1%; white-space: nowrap; padding-left: 2px; padding-right: 2px; text-align: center; }
 
 .actions { display: flex; align-items: center; gap: 12px; }
 #save-status { color: #10b981; font-size: 13px; }

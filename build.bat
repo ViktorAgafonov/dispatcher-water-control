@@ -1,7 +1,7 @@
 @echo off
-REM Сборка Windows-приложения Pulsar Monitor (x64) через @electron/packager.
-REM Результат: dist\Pulsar Monitor-win32-x64\Pulsar Monitor.exe
-REM Опционально: zip-архив dist\PulsarMonitor-<ver>-win-x64.zip.
+REM Сборка Windows-приложения "Диспетчер Водоснабжения" (x64) через electron-packager.
+REM Результат: dist\Диспетчер Водоснабжения-win32-x64\Диспетчер Водоснабжения.exe
+REM Опционально: zip-архив dist\ДиспетчерВодоснабжения-<ver>-win-x64.zip.
 
 setlocal
 

@@ -1,5 +1,5 @@
 #Requires -Version 5
-# Сборка Windows-приложения Pulsar Monitor (x64) через @electron/packager.
+# Сборка Windows-приложения "Диспетчер Водоснабжения" (x64) через electron-packager.
 # Использование:
 #   .\build.ps1          # только каталог с .exe
 #   .\build.ps1 -Zip     # дополнительно запаковать в zip
